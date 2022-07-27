@@ -1,0 +1,60 @@
+version: '3'
+
+volumes:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker-compose/django/Dockerfile
+    image: backend
+    container_name: backend
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend:/app:z
+      - ./.docker_bash_history:/root/.bash_history:Z
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.envs/.django
+      - ./.envs/.postgres
+    command: /start
+    restart: unless-stopped
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./docker-compose/postgres/Dockerfile
+    image: postgres
+    container_name: postgres
+    volumes:
+      - ./.database/postgres:/var/lib/postgresql/data:Z
+      - ./.database/postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.postgres
+    restart: unless-stopped
+
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: ./docker-compose/react/Dockerfile
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+      - ../redux-crud-factory/src:/app/src/redux/ReduxCrudFactory
+      - ../ReduxCrudFactory.js:/app/src/redux/reduxCrudFactory.js
+      - ../react-toolbox/src:/app/src/components/shared/ReactToolbox
+      - ../ReactToolbox.js:/app/src/components/shared/ReactToolbox.js
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    env_file:
+      - ./.envs/.react
+    depends_on:
+      - backend
+    restart: unless-stopped

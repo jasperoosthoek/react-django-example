@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block navigation %}{% endblock navigation %}
+
+{% block title %}Ranking{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Ranking</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Place</th>
+        <th scope="col">Team</th>
+        <th scope="col">Points</th>
+        <th scope="col">Games played</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data in teams_sorted %}
+        <tr>
+            <td>
+              {{ data.rank }}
+            </td>
+            <td>
+              {% for team in data.teams %} 
+                <a class="badge badge-primary" href="{% url 'game:team_detail' team.id %}">{{ team }}</a>
+              {% endfor %}
+            </td>
+            <td>{{ data.points }}</td>
+            <td>{{ data.games_count }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

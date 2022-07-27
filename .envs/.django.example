@@ -1,0 +1,8 @@
+# General
+# ------------------------------------------------------------------------------
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
+
+DJANGO_ALLOWED_HOSTS=localhost,0.0.0.0,127.0.0.1
+DJANGO_EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+DJANGO_FRONTEND_URL=http://localhost:3000

@@ -1,0 +1,6 @@
+if [ -z "$1" ]
+then
+    exec docker exec -it frontend bash
+else
+    exec docker exec -it frontend "$@"
+fi

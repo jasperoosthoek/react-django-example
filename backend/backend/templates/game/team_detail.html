@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Team {{ team }}{% endblock %}
+
+{% block navigation %}{% endblock navigation %}
+
+{% block content %}
+  <div class="container">
+    <div class="control-group float-right">
+      <div class="controls">
+        <a href="{% url 'game:ranking' %}" role="button" class="btn btn-primary">Ranking</a>
+      </div>
+    </div>
+  </div>
+  <h2>Team <i>{{ team }}</i>
+  </h2>
+
+  <div style="margin: 30px;">
+    <div class="row">
+      <div class="col">Points in total:</div>
+      <div class="col">{{ points }}</div>
+    </div>
+    <div class="row">
+      <div class="col">Points per game:</div>
+      <div class="col">{{ points_per_game|floatformat:1 }}</div>
+    </div>
+    <div class="row">
+      <div class="col">Percentage won:</div>
+      <div class="col">{{ percentage_won|floatformat }}%</div>
+    </div>
+    <div class="row">
+      <div class="col">Percentage lost:</div>
+      <div class="col">{{ percentage_lost|floatformat }}%</div>
+    </div>
+    <div class="row">
+      <div class="col">Percentage draw:</div>
+      <div class="col">{{ percentage_draw|floatformat }}%</div>
+    </div>
+    <div class="row">
+      <div class="col">Number of close calls (wins with 1 point difference):</div>
+      <div class="col">{{ close_calls }}</div>
+    </div>
+  </div>
+    
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Game</th>
+        <th scope="col">Opponent</th>
+        <th scope="col">Score</th>
+        <th scope="col">Points</th>
+        <th scope="col">Date</th>
+      </tr>
+    </thead>
+      <tbody>
+        {% if games %}
+          {% for data in games %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>
+                <a class="badge badge-primary" href="{% url 'game:team_detail' data.opponent.id %}">{{ data.opponent }}</a>
+              </td>
+              <td><strong>{{ data.score }}</strong> - {{ data.opponent_score }}</td>
+              <td>{{ data.points }}</td>
+              <td>{{ data.game.date }}</td>
+            </tr>
+          {% endfor %}
+        {% endif %}
+      </tbody>
+  </table>
+  {% if not games %}
+    <div class="d-flex justify-content-center">
+      <i>This team has not played any games yet!</i>
+    </div>
+  {% endif %}
+</div>
+{% endblock content %}
