@@ -6,20 +6,30 @@ import _ from 'lodash';
 
 import { mapToProps, actions } from '../../redux/factory';
 
-import LoadingIndicator from '../shared/LoadingIndicator';
-import CreateEditModal from '../shared/CreateEditModal';
-import { CreateButton, DeleteConfirmButton } from '../shared/IconButtons';
+import {
+  LoadingIndicator,
+  CreateEditModal as CreateModal,
+  CreateEditModal as EditModal,
+  CreateButton,
+  DeleteConfirmButton,
+} from '../shared/ReactToolbox';
 import PlayersFormField from '../players/PlayersFormField';
 import TeamPlayers from './TeamPlayers';
 
+// Demonstration of a class based component. Because classes cannot use hooks and use connect instead,
+// Therefore, the loading state cannot be attached to the functions, for instance:
+// createTeam.isLoading will be undefined, and createTeamIsLoading needs to be taken from the props.
+// Using redux connect(), the component will be flooded with props. This of course is similar to function 
+// based components when connect() is used instead of hooks.
 class TeamsList extends Component {
   state = {
-    showNewModal: false
-
+    showNewModal: false,
+    teamInEditModal: null,
   }
 
   render() {
-    const { getTeamsIsLoading,
+    const {
+      getTeamsIsLoading,
       teamsList,
       createTeam,
       createTeamIsLoading,
@@ -56,8 +66,8 @@ class TeamsList extends Component {
     };
 
     return <>
-      <Container fluid className="App py-2 overflow-hidden">
-        <Row className="card-example d-flex flex-row overflow-auto">
+      <Container fluid className='App py-2 overflow-hidden'>
+        <Row className='card-example d-flex flex-row overflow-auto'>
           {Object.values(teamsList).map((team, key) =>
             <Card style={{ minWidth: '25rem', margin: '10px' }} key={key}>
               <Card.Body
@@ -66,18 +76,18 @@ class TeamsList extends Component {
                 {team.name ? team.name : `#${team.id}`}
 
                 <DeleteConfirmButton
-                  modalTitle="Delete team"
+                  modalTitle='Delete team'
                   onDelete={() => deleteTeam(team)}
                   loading={deleteTeamIsLoading}
-                  className="float-end"
+                  className='float-end'
                 />
                 <a
                   href={`${process.env.REACT_APP_BACKEND_URL}/game/team/${team.id}/`}
-                  target="_blank"
-                  rel="noreferrer"
+                  target='_blank'
+                  rel='noreferrer'
                   onClick={e => e.stopPropagation()}
-                  role="button"
-                  className="float-end btn btn-light btn-sm"
+                  role='button'
+                  className='float-end btn btn-light btn-sm'
                 >
                   Results
                 </a>
@@ -94,9 +104,9 @@ class TeamsList extends Component {
         </Row>
       </Container>
       
-      <CreateEditModal
+      <CreateModal
         show={this.state.showNewModal}
-        modalTitle="New team"
+        modalTitle='New team'
         loading={createTeamIsLoading}
         onHide={() => this.setState({ showNewModal: false })}
         initialState={{ name: '', players: [] }}
@@ -104,7 +114,7 @@ class TeamsList extends Component {
         validate={validateTeam}
 
         onSave={newTeam => {
-          this.props.createTeam(
+          createTeam(
             newTeam,
             { callback: () => this.setState({ showNewModal: false }) }
           );
@@ -112,16 +122,16 @@ class TeamsList extends Component {
       />
 
       {this.state.teamInEditModal &&
-        <CreateEditModal
+        <EditModal
           show={!!this.state.teamInEditModal}
-          modalTitle="Modify team"
+          modalTitle='Modify team'
           loading={updateTeamIsLoading}
           onHide={() => this.setState({ teamInEditModal: null })}
           initialState={this.state.teamInEditModal}
           formFields={formFields}
           validate={validateTeam}
 
-          onSave={team => this.props.updateTeam(
+          onSave={team => updateTeam(
             team,
             { callback: () => this.setState({ teamInEditModal: null }) }
           )}
