@@ -24,7 +24,7 @@ const Game = ({ team, score }) => <>
   <TeamPlayers team={team} />
 </>
 
-const GamesList = ({}) => {
+const GamesList = () => {
   const [state, setState] = useSetState({
     showNewModal: false,
     showMatchMakerModal: false,
@@ -34,7 +34,7 @@ const GamesList = ({}) => {
   const { getGamesList, gamesList, createGame, updateGame, deleteGame, matchMaker } = use.games();
   const { teamsList } = use.teams();
   
-  if (getGamesList.isLoading || !gamesList) return <LoadingIndicator />;
+  if (getGamesList.isLoading || !gamesList || !teamsList) return <LoadingIndicator />;
   
   const formFields = {
     date: { label: 'Date' },

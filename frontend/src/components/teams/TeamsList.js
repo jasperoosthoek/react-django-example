@@ -29,7 +29,7 @@ class TeamsList extends Component {
 
   render() {
     const {
-      getTeamsIsLoading,
+      getTeamsListIsLoading,
       teamsList,
       createTeam,
       createTeamIsLoading,
@@ -37,11 +37,11 @@ class TeamsList extends Component {
       updateTeamIsLoading,
       deleteTeam,
       deleteTeamIsLoading,
-      getPlayersIsLoading,
+      getPlayersListIsLoading,
       playersList,
     } = this.props;
     
-    if (getTeamsIsLoading || !teamsList || getPlayersIsLoading || !playersList) return <LoadingIndicator />;
+    if (getTeamsListIsLoading || !teamsList || getPlayersListIsLoading || !playersList) return <LoadingIndicator />;
     
     const formFields = {
       name: { label: 'Name' },
