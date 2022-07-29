@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {  Navbar, Nav, Tabs, Tab } from 'react-bootstrap';
+import { Container, Navbar, Nav, Tabs, Tab } from 'react-bootstrap';
 // import _ from 'lodash';
 import Websocket from 'react-websocket';
 import { toast } from 'react-toastify';
@@ -33,43 +33,45 @@ const Dashboard = () => {
         <Navbar.Brand href='/'>Table Tennis Game</Navbar.Brand>
         <Navbar.Collapse className='justify-content-end'>
           <Navbar.Text>
-            User: <b>{user.username}</b>
+            <b>{user &&(user.name || user.username)}</b>
           </Navbar.Text>
           <Nav.Link onClick={() => logout()}>Logout</Nav.Link>
         </Navbar.Collapse>
       </Navbar>
-      <Tabs
-        activeKey={state.activeTab}
-        onSelect={tab => setState({ activeTab: tab })}
-        className='mb-3'
-      >
-        <Tab
-          eventKey='players'
-          title='Players'
+      <Container className='container-item'>
+        <Tabs
+          activeKey={state.activeTab}
+          onSelect={tab => setState({ activeTab: tab })}
+          className='mb-3'
         >
-          <PlayersList />
-        </Tab>
-        <Tab
-          eventKey='teams'
-          title='Teams'
-          disabled={!playersList}
-        >
-          {playersList && Object.keys(playersList).length === 0
-            ? <i>Create at least one player</i>
-            : <TeamsList />
-          }
-        </Tab>
-        <Tab
-          eventKey='games'
-          title='Games'
-          disabled={!teamsList}
-        >
-          {teamsList && Object.keys(teamsList).length < 2
-            ? <i>Create at least two teams</i>
-            : <GamesList />
-          }
-        </Tab>
-      </Tabs>
+          <Tab
+            eventKey='players'
+            title='Players'
+          >
+            <PlayersList />
+          </Tab>
+          <Tab
+            eventKey='teams'
+            title='Teams'
+            disabled={!playersList}
+          >
+            {playersList && Object.keys(playersList).length === 0
+              ? <i>Create at least one player</i>
+              : <TeamsList />
+            }
+          </Tab>
+          <Tab
+            eventKey='games'
+            title='Games'
+            disabled={!teamsList}
+          >
+            {teamsList && Object.keys(teamsList).length < 2
+              ? <i>Create at least two teams</i>
+              : <GamesList />
+            }
+          </Tab>
+        </Tabs>
+      </Container>
     </>
   );
 };

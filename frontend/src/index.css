@@ -21,3 +21,14 @@ code {
   cursor: pointer;
   user-select: none;
 }
+
+.navbar {
+  padding: 0.5rem 1rem;
+}
+
+.nav-link {
+  cursor: pointer;
+  /* text-decoration: none; */
+  color: rgba(26,26,26,.75);
+  padding: 0.5rem 1rem;
+}
